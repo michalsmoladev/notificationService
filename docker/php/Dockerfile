@@ -25,8 +25,4 @@ RUN docker-php-ext-install pdo pdo_mysql zip intl opcache pcntl gd \
     && pecl install amqp \
     && docker-php-ext-enable amqp
 
-#COPY .bash_aliases /root/.bash_aliases
-#
-#RUN echo ". ~/.bash_aliases" >> ~/.bashrc
-
 WORKDIR /var/www
