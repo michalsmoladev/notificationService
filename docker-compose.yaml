@@ -1,0 +1,43 @@
+services:
+    php:
+        build:
+            context: docker/php
+            args:
+                TIMEZONE: ${TIMEZONE}
+        ports:
+            - "${BIND_IP}:${PHP_PORT}:${PHP_PORT}"
+        volumes:
+            - .:/var/www:rw
+        depends_on:
+            - mysql
+            - rabbitmq
+
+    nginx:
+        build: docker/nginx
+        ports:
+            - "${BIND_IP}:${APP_PORT}:${APP_PORT}"
+            - "${BIND_IP}:${APP_PORT_SSL}:${APP_PORT_SSL}"
+        volumes_from:
+            - php
+        volumes:
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./var/log/nginx/:/var/log/nginx
+        command: [nginx-debug, '-g', 'daemon off;']
+
+    mysql:
+        image: mysql:8.0.34
+        volumes:
+            - "./var/db:/var/lib/mysql"
+        ports:
+            - "${BIND_IP}:${MYSQL_PORT}:${MYSQL_PORT}"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: reservationapp
+            MYSQL_USER: user
+            MYSQL_PASSWORD: pass
+
+    rabbitmq:
+        image: rabbitmq:3.11-management
+        ports:
+            - "${BIND_IP}:${RABBIT_PORT}:${RABBIT_PORT}"
+            - "${BIND_IP}:${RABBIT_PORT_MANAGEMENT}:${RABBIT_PORT_MANAGEMENT}"
