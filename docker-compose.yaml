@@ -32,7 +32,7 @@ services:
             - "${BIND_IP}:${MYSQL_PORT}:${MYSQL_PORT}"
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: reservationapp
+            MYSQL_DATABASE: notificationapp
             MYSQL_USER: user
             MYSQL_PASSWORD: pass
 
@@ -41,3 +41,9 @@ services:
         ports:
             - "${BIND_IP}:${RABBIT_PORT}:${RABBIT_PORT}"
             - "${BIND_IP}:${RABBIT_PORT_MANAGEMENT}:${RABBIT_PORT_MANAGEMENT}"
+
+    mailcatcher:
+        image: dockage/mailcatcher
+        ports:
+            - "1025:1025"
+            - "1080:1080"

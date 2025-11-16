@@ -1,10 +1,22 @@
-parameters:
+imports:
+    - { resource: custom/notification_config.yaml }
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
 
     App\:
         resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Application\Provider\Sms\FailoverSmsSender:
+        class: 'App\Application\Provider\Sms\FailoverSmsSender'
+
+    App\Application\Provider\SmsProviderInterface: '@App\Application\Provider\Sms\FailoverSmsSender'
+    App\Application\Service\NotificationService:
+        arguments:
+            $notificationsConfiguration: '%notifications.configuration%'

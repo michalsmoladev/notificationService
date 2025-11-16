@@ -1,0 +1,6 @@
+framework:
+    rate_limiter:
+        user_response_notifications:
+            policy: 'fixed_window'
+            limit: 300
+            interval: '1 hour'
