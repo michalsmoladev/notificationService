@@ -37,5 +37,5 @@ framework:
                 rate_limiter: user_response_notifications
 
         routing:
-#            App\Application\Command\CreateNotification\CreateNotificationCommand: create_notification
-#            App\Application\Command\SendNotification\SendNotificationCommand: send_notification
+            App\Application\Command\CreateNotification\CreateNotificationCommand: create_notification
+            App\Application\Command\SendNotification\SendNotificationCommand: send_notification
