@@ -28,4 +28,9 @@ class NotificationRepository implements NotificationRepositoryInterface
     {
         return $this->repository->findOneBy(['id' => $id]);
     }
+
+    public function findAllByUserId(Uuid $userId): array
+    {
+        return $this->repository->findBy(['userId' => $userId]);
+    }
 }

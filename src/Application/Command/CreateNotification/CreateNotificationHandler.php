@@ -9,6 +9,7 @@ use App\Domain\Entity\NotificationType;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Uid\Uuid;
 
 #[AsMessageHandler]
 class CreateNotificationHandler
@@ -31,6 +32,7 @@ class CreateNotificationHandler
             recipientNumber: $command->notificationDTO->recipientNumber ?? null,
             subject: $command->notificationDTO->subject,
             message: $command->notificationDTO->message,
+            userId: Uuid::fromString($command->notificationDTO->userId),
             isDelayed: $command->notificationDTO->isDelayed,
         );
 

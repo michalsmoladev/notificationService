@@ -36,6 +36,11 @@ class NotificationMultiDTO extends NotificationDTO
 
         #[OA\Property(example: false)]
         public bool $isDelayed,
+
+        #[OA\Property(example: 'f924bc8d-e1e1-40f4-a47c-7dd89006ca8f')]
+        #[Assert\NotBlank]
+        public string $userId,
     ) {
+        parent::__construct($subject, $message, $isDelayed, $userId);
     }
 }

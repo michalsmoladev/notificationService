@@ -22,6 +22,9 @@ class Notification
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $sentAt;
+
     public function __construct(
         #[ORM\Column(type: 'string', length: 128, nullable: true)]
         private ?string $senderEmail,
@@ -41,6 +44,9 @@ class Notification
         #[ORM\Column(type: 'json', length: 255)]
         private string $message,
 
+        #[ORM\Column(type: 'uuid', length: 36)]
+        private Uuid $userId,
+
         #[ORM\Column(type: 'boolean')]
         private bool $isDelayed = false,
     ) {
@@ -55,6 +61,7 @@ class Notification
         ?string $recipientNumber,
         string $subject,
         string $message,
+        Uuid $userId,
         bool $isDelayed,
     ): self
     {
@@ -65,6 +72,7 @@ class Notification
             recipientNumber: $recipientNumber,
             subject: $subject,
             message: $message,
+            userId: $userId,
         );
 
         $notification->id = $id;
@@ -171,6 +179,23 @@ class Notification
     public function markAsSent(): void
     {
         $this->status = NotificationStatus::SENT;
+    }
+
+    public function setSentAt(\DateTimeImmutable $sentAt): self
+    {
+        $this->sentAt = $sentAt;
+
+        return $this;
+    }
+
+    public function getSentAt(): ?\DateTimeImmutable
+    {
+        return $this->sentAt;
+    }
+
+    public function getUserId(): Uuid
+    {
+        return $this->userId;
     }
 
     public function markAsError(): void

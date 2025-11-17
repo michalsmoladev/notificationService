@@ -26,6 +26,7 @@ class SendNotificationHandler
             $this->notificationStrategy->process($notification);
 
             $notification->markAsSent();
+            $notification->setSentAt(new \DateTimeImmutable());
         } catch (AllProvidersFailedException $exception) {
             $notification->markAsError();
 
