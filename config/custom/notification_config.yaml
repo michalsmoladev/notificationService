@@ -1,0 +1,5 @@
+parameters:
+    notifications.configuration:
+        email: '%env(bool:EMAIL_NOTIFICATION_ENABLE)%'
+        sms: '%env(bool:SMS_NOTIFICATION_ENABLE)%'
+        multi: '%env(bool:MULTI_NOTIFICATION_ENABLE)%'

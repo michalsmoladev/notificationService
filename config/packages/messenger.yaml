@@ -1,12 +1,41 @@
 framework:
     messenger:
-        default_bus: command.bus
-        buses:
-            command.bus: ~
         transports:
-            async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            failed: 'doctrine://default?queue_name=failed'
-        failure_transport: failed
+            create_notification:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy: &default_retry_strategy
+                    max_retries: 5
+                    delay: 60000 # 60s
+                    multiplier: 2
+                    max_delay: 60000 # 15m
+                options:
+                    exchange:
+                        name: create_notification
+                        type: direct
+                    queues:
+                        create_notification: ~
+
+            send_notification:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy: *default_retry_strategy
+                options:
+                    exchange:
+                        name: send_notification
+                        type: direct
+                    queues:
+                        send_notification: ~
+
+            send_notification_throttled:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy: *default_retry_strategy
+                options:
+                    exchange:
+                        name: send_notification_throttled
+                        type: direct
+                    queues:
+                        send_notification_throttled: ~
+                rate_limiter: user_response_notifications
 
         routing:
-
+#            App\Application\Command\CreateNotification\CreateNotificationCommand: create_notification
+#            App\Application\Command\SendNotification\SendNotificationCommand: send_notification
